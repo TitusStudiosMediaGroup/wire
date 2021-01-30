@@ -575,6 +575,10 @@ function Editor:CreateTab(chosenfile)
 				str = str:sub(1, -2)
 				SetClipboardText(str)
 			end)
+			menu:AddSpacer()
+			menu:AddOption("Split Editor", function()
+
+			end)
 			menu:Open()
 			return
 		end
@@ -775,7 +779,9 @@ function Editor:InitComponents()
 	self.C.MainPane = vgui.Create("DPanel", self.C.Divider)
 	self.C.Menu = vgui.Create("DPanel", self.C.MainPane)
 	self.C.Val = vgui.Create("Button", self.C.MainPane) -- Validation line
-	self.C.TabHolder = vgui.Create("DPropertySheet", self.C.MainPane)
+	self.C.SplitDivider = vgui.Create("DHorizontalDivider", self.C.MainPane)
+	self.C.TabHolder = vgui.Create("DPropertySheet", self.C.SplitDivider)
+	self.C.SplitTab = vgui.Create("DPropertySheet", self.C.SplitDivider)
 
 	self.C.Btoggle = vgui.CreateFromTable(DMenuButton, self.C.Menu) -- Toggle Browser being shown
 	self.C.Sav = vgui.CreateFromTable(DMenuButton, self.C.Menu) -- Save button
@@ -788,7 +794,7 @@ function Editor:InitComponents()
 	self.C.Control = self:addComponent(vgui.Create("Panel", self), -350, 52, 342, -32) -- Control Panel
 	self.C.Credit = self:addComponent(vgui.Create("DTextEntry", self), -160, 52, 150, 150) -- Credit box
 	self.C.Credit:SetEditable(false)
-	
+
 	self:CreateTab("generic")
 
 	-- extra component options
@@ -800,15 +806,23 @@ function Editor:InitComponents()
 	self.C.Divider:SetCookieName("wire_expression2_editor_divider")
 	self.C.Divider:SetLeftMin(0)
 
+	self.C.SplitDivider:SetLeft(self.C.TabHolder)
+	self.C.SplitDivider:SetRight(self.C.SplitTab)
+	self.C.SplitDivider:Dock(FILL)
+	self.C.SplitDivider:SetDividerWidth(4)
+	self.C.SplitDivider:SetCookieName("wire_expression2_editor_splitdivider")
+	self.C.SplitDivider:SetLeftMin(0)
+
 	local DoNothing = function() end
 	self.C.MainPane.Paint = DoNothing
 	--self.C.Menu.Paint = DoNothing
 
 	self.C.Menu:Dock(TOP)
-	self.C.TabHolder:Dock(FILL)
+	--self.C.TabHolder:Dock(FILL)
 	self.C.Val:Dock(BOTTOM)
 
 	self.C.TabHolder:SetPadding(1)
+	self.C.SplitTab:SetPadding(1)
 
 	self.C.Menu:SetHeight(24)
 	self.C.Menu:DockPadding(2,2,2,2)
